@@ -1,10 +1,13 @@
-// app/models/bear.js
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var mongoose     = require('mongoose');
-var Schema       = mongoose.Schema;
-
-var RecipeSchema   = new Schema({
-    name: String
+const RecipeSchema = new Schema({
+    name: String,
+    ingredients: [{
+        name: String,
+        amount: String
+    }],
+    instructions: [String]
 });
 
 module.exports = mongoose.model('Recipe', RecipeSchema);

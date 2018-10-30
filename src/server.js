@@ -7,8 +7,9 @@ const app = express();                 // define our app using express
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/recipes'); // connect to our database
+mongoose.connection('mongodb://localhost:27017/recipes'); // connect to our database
 const Recipe = require('./models/recipe');
+const User = require('./models/user');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -30,7 +31,7 @@ router.use(function (req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function (req, res) {
-    res.json({message: 'hooray! welcome to our api!'});
+    res.json({message: 'Welcome to the recipe app api!'});
 });
 
 // more routes for our API will happen here
@@ -97,6 +98,35 @@ router.route('/recipes/:recipe_id')
         });
     });
 
+// on routes that end in /users
+// ----------------------------------------------------
+router.route('/users')
+    .post(function (req, res) {  // create a user
+        let user = new User();
+        user.username = req.body.username;
+        user.password = req.body.password;
+
+
+        // save the user
+        user.save(function (err) {
+            if (err)
+                res.send(err);
+            res.json({message: `User created: ${req.body.username}`});
+        });
+    });
+
+// on routes that end in /users/:username
+// ----------------------------------------------------
+// router.route('/users/:username')
+//     .get(function (req, res) {
+//         User.findById(req.params.user_id, function (err, user) {
+//             if (err)
+//                 res.send(err);
+//
+//             user.comparePassword(user.password)
+//             res.json(user);
+//         });
+//     });
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
