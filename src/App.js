@@ -7,7 +7,6 @@ class App extends Component {
     constructor(){
         super();
 
-        this.loginCallback = this.loginCallback.bind(this);
         this.LoginOrMain = this.LoginOrMain.bind(this);
 
         this.state = {
@@ -15,16 +14,11 @@ class App extends Component {
         }
     }
 
-    loginCallback(status){
-        if (status)
-            this.setState({loginStatus: status});
-    }
-
     LoginOrMain(){
         if(this.state.loginStatus)
             return <Main/>;
         else
-            return <Login loginStatus={this.loginCallback}/>;
+            return <Login loginStatus={(status) => this.setState({loginStatus: status})}/>;
     }
 
     render() {
