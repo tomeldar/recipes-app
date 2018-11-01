@@ -8,6 +8,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Axios from 'axios'
+import QS from 'qs'
 
 const API = "http://localhost:8080/api/";
 
@@ -34,12 +36,17 @@ class Login extends Component {
 
         this.handleLogin = this.handleLogin.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
 
         this.state = {
             username: "",
             password: "",
-            open: false
+            open: false,
+            registerUsername: "",
+            registerEmail: "",
+            registerPassword: "",
+            registerConfirmPassword: ""
         };
     }
 
@@ -49,6 +56,32 @@ class Login extends Component {
     }
 
     handleRegister() { //TODO: Call API to create a user
+        if (this.state.registerPassword === this.state.registerConfirmPassword) {
+            Axios.get(`${API}users/${this.state.registerUsername}`)
+                .then(() => {
+                    console.log("User already exists")
+                })
+                .catch(() => {
+                    Axios.post(`${API}users`, QS.stringify({
+                            username: this.state.registerUsername,
+                            email: this.state.registerEmail,
+                            password: this.state.password,
+                        })
+                    )
+                        .then(() => {
+                            console.log(`Successfully made user: ${this.state.registerUsername}`);
+                            this.props.loginStatus(true);
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        })
+                });
+        }
+        console.log("Passwords do not match")
+
+    }
+
+    handleOpen() {
         this.setState({ open: true })
     }
 
@@ -80,7 +113,7 @@ class Login extends Component {
                         <div style={{ flexDirection: 'row' }}>
                             <Button onClick={this.handleLogin} variant="contained"
                                     color="primary">Login</Button>
-                            <Button onClick={this.handleRegister} variant="contained"
+                            <Button onClick={this.handleOpen} variant="contained"
                                     color="secondary" style={{ marginLeft: '1em' }}>Register</Button>
                             <Dialog
                                 open={this.state.open}
@@ -96,7 +129,8 @@ class Login extends Component {
                                         label="Username..."
                                         text
                                         fullWidth
-                                        required="true"
+                                        required={true}
+                                        onChange={(e) => this.setState({ registerUsername: e.target.value })}
                                     />
                                     <TextField
                                         margin="dense"
@@ -104,7 +138,8 @@ class Login extends Component {
                                         label="Email Address..."
                                         type="email"
                                         fullWidth
-                                        required="true"
+                                        required={true}
+                                        onChange={(e) => this.setState({ registerEmail: e.target.value })}
                                     />
                                     <TextField
                                         margin="dense"
@@ -112,7 +147,8 @@ class Login extends Component {
                                         label="Password..."
                                         type="password"
                                         fullWidth
-                                        required="true"
+                                        required={true}
+                                        onChange={(e) => this.setState({ registerPassword: e.target.value })}
                                     />
                                     <TextField
                                         margin="dense"
@@ -120,14 +156,15 @@ class Login extends Component {
                                         label="Confirm Password..."
                                         type="password"
                                         fullWidth
-                                        required="true"
+                                        required={true}
+                                        onChange={(e) => this.setState({ registerConfirmPassword: e.target.value })}
                                     />
                                 </DialogContent>
                                 <DialogActions>
                                     <Button onClick={this.handleClose} color="primary">
                                         Cancel
                                     </Button>
-                                    <Button onClick={this.handleClose} color="primary">
+                                    <Button onClick={this.handleRegister} color="primary">
                                         Register
                                     </Button>
                                 </DialogActions>

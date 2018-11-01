@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.3.2",
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.2",
     "body-parser": "latest",
     "express": "latest",
     "mongoose": "^5.3.7",
     "nedb": "^1.8.0",
+    "qs": "^6.5.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-scripts": "2.0.5"
