@@ -13,7 +13,7 @@ const User = require('./models/user');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 8080;        // set our port
@@ -31,7 +31,7 @@ router.use(function (req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/', function (req, res) {
-    res.json({message: 'Welcome to the recipe app api!'});
+    res.json({ message: 'Welcome to the recipe app api!' });
 });
 
 // more routes for our API will happen here
@@ -47,7 +47,7 @@ router.route('/recipes')
         recipe.save(function (err) {
             if (err)
                 res.send(err);
-            res.json({message: `Recipe created: ${req.body.name}`});
+            res.json({ message: `Recipe created: ${req.body.name}` });
         });
     })
 
@@ -79,7 +79,7 @@ router.route('/recipes/:recipe_id')
             recipe.name = req.body.name;
 
             recipe.save(function (err) {
-                if(err)
+                if (err)
                     res.send(err);
 
                 res.json({ message: `Recipe name updated: ${prevName} to ${recipe.name}` })
@@ -87,10 +87,10 @@ router.route('/recipes/:recipe_id')
         })
     })
 
-    .delete(function(req,res) {
+    .delete(function (req, res) {
         Recipe.remove({
             _id: req.params.recipe_id
-        }, function(err, recipe) {
+        }, function (err, recipe) {
             if (err)
                 res.send(err);
 
@@ -111,7 +111,7 @@ router.route('/users')
         user.save(function (err) {
             if (err)
                 res.send(err);
-            res.json({message: `User created: ${req.body.username}`});
+            res.json({ message: `User created: ${req.body.username}` });
         });
     });
 

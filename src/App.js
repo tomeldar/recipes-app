@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Main from "./components/Main";
 import Login from "./components/Login";
 
 class App extends Component {
-    constructor(){
+    constructor() {
         super();
 
         this.LoginOrMain = this.LoginOrMain.bind(this);
@@ -14,11 +14,11 @@ class App extends Component {
         }
     }
 
-    LoginOrMain(){
-        if(this.state.loginStatus)
+    LoginOrMain() {
+        if (this.state.loginStatus)
             return <Main/>;
         else
-            return <Login loginStatus={(status) => this.setState({loginStatus: status})}/>;
+            return <Login loginStatus={(status) => this.setState({ loginStatus: status })}/>;
     }
 
     render() {
