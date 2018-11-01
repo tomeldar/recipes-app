@@ -8,6 +8,8 @@
     height: 7em;
     justify-content: space-between;
     padding: 1em;
+    min-height: 200px;
+    min-width: 30px;
 }
 
 .container {

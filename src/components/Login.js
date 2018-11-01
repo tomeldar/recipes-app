@@ -8,6 +8,8 @@ import React, {Component} from 'react';
 import '../css/Login.css';
 import TextField from '@material-ui/core/TextField';
 
+const API = "http://localhost:8080/api/";
+
 const styles = {
     card: {
         minWidth: 275,
@@ -26,8 +28,11 @@ const styles = {
 };
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.handleLogin = this.handleLogin.bind(this);
+        this.handleRegister = this.handleRegister.bind(this);
 
         this.state = {
             username: "",
@@ -35,8 +40,13 @@ class Login extends Component {
         };
     }
 
-    handleLogin(e) {
+    handleLogin() { //TODO: Call API to check if login info is correct
         console.log("Attempting login");
+        this.props.loginStatus(true);
+    }
+
+    handleRegister() { //TODO: Call API to create a user
+        console.log("Attempting register");
     }
 
     render() {
@@ -60,7 +70,12 @@ class Login extends Component {
                             onChange={(e) => this.setState({password: e.target.value})}
                         />
                         <br/>
-                        <Button onClick={(e) => this.handleLogin(e)} variant="contained" color="primary">Login</Button>
+                        <div style={{flexDirection: 'row'}}>
+                            <Button onClick={() => this.handleLogin()} variant="contained"
+                                    color="primary">Login</Button>
+                            <Button onClick={() => this.handleRegister()} variant="contained"
+                                    color="secondary" style={{marginLeft: '1em'}}>Register</Button>
+                        </div>
                     </Card>
                 </div>
             </div>

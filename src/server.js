@@ -115,6 +115,7 @@ router.route('/users')
         });
     });
 
+//TODO Create api to create user and api to check if user exists and login info is correct
 // on routes that end in /users/:username
 // ----------------------------------------------------
 // router.route('/users/:username')
