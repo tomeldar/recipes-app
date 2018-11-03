@@ -55,30 +55,33 @@ class Login extends Component {
         this.props.loginStatus(true);
     }
 
-    handleRegister() { //TODO: Call API to create a user
+    handleRegister() {
         if (this.state.registerPassword === this.state.registerConfirmPassword) {
             Axios.get(`${API}users/${this.state.registerUsername}`)
-                .then(() => {
-                    console.log("User already exists")
-                })
-                .catch(() => {
-                    Axios.post(`${API}users`, QS.stringify({
+                .then((e) => {
+                    if (e.data === undefined || e.data.length === 0) {
+                        Axios.post(`${API}users`, {
                             username: this.state.registerUsername,
                             email: this.state.registerEmail,
-                            password: this.state.password,
+                            password: this.state.registerPassword
                         })
-                    )
-                        .then(() => {
-                            console.log(`Successfully made user: ${this.state.registerUsername}`);
-                            this.props.loginStatus(true);
-                        })
-                        .catch((err) => {
-                            console.error(err);
-                        })
-                });
+                            .then(() => {
+                                console.log(`Successfully made user: ${this.state.registerUsername}`);
+                                this.props.loginStatus(true);
+                            })
+                            .catch((e) => {
+                                console.log(e)
+                            })
+                    } else {
+                        console.log("User already exists")
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
+        } else {
+            console.log("Passwords do not match")
         }
-        console.log("Passwords do not match")
-
     }
 
     handleOpen() {
@@ -129,7 +132,7 @@ class Login extends Component {
                                         label="Username..."
                                         text
                                         fullWidth
-                                        required={true}
+                                        required
                                         onChange={(e) => this.setState({ registerUsername: e.target.value })}
                                     />
                                     <TextField
@@ -138,7 +141,7 @@ class Login extends Component {
                                         label="Email Address..."
                                         type="email"
                                         fullWidth
-                                        required={true}
+                                        required
                                         onChange={(e) => this.setState({ registerEmail: e.target.value })}
                                     />
                                     <TextField
@@ -147,7 +150,7 @@ class Login extends Component {
                                         label="Password..."
                                         type="password"
                                         fullWidth
-                                        required={true}
+                                        required
                                         onChange={(e) => this.setState({ registerPassword: e.target.value })}
                                     />
                                     <TextField
@@ -156,7 +159,7 @@ class Login extends Component {
                                         label="Confirm Password..."
                                         type="password"
                                         fullWidth
-                                        required={true}
+                                        required
                                         onChange={(e) => this.setState({ registerConfirmPassword: e.target.value })}
                                     />
                                 </DialogContent>

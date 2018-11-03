@@ -13,6 +13,12 @@ const User = require('./models/user');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Content-type', 'application/x-www-form-urlencoded');
+    next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -46,7 +52,7 @@ router.route('/recipes')
         // save the recipe
         recipe.save(function (err) {
             if (err)
-                res.send(err);
+                return res.send(err);
             res.json({ message: `Recipe created: ${req.body.name}` });
         });
     })
@@ -107,7 +113,6 @@ router.route('/users')
         user.password = req.body.password;
         user.email = req.body.email;
 
-
         // save the user
         user.save(function (err) {
             if (err)
@@ -121,13 +126,21 @@ router.route('/users')
 // ----------------------------------------------------
 router.route('/users/:username')
     .get(function (req, res) {
-        User.findOne(req.params.user_id, function (err, user) {
-            if (err)
-                res.send(err);
+        let query = User.find({username: req.params.username});
+        query.exec(function (err, user) {
+           if (err)
+               res.send(err);
 
-            // user.comparePassword(req.body.password);
-            res.json(user);
+           res.send(user)
         });
+
+        // User.find(req.params.user_id, function (err, user) {
+        //     if (err)
+        //         res.send(err);
+        //
+        //     // user.comparePassword(req.body.password);
+        //     res.json(user);
+        // });
     });
 
 // REGISTER OUR ROUTES -------------------------------
